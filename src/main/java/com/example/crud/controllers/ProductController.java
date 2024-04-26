@@ -22,7 +22,7 @@ public class ProductController {
     private ProductRepository repository;
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        var allProducts = repository.findAll();
+        var allProducts = repository.findAllByActiveTrue();
         return ResponseEntity.ok(allProducts);
     }
 
@@ -43,7 +43,7 @@ public class ProductController {
             product.setPrice_in_cents(data.price_in_cents());
             return ResponseEntity.ok(product);
         } else {
-            throw new EntityNotFoundException();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -53,10 +53,10 @@ public class ProductController {
         Optional<Product> optionalProduct = repository.findById(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            repository.delete(product);
-            return ResponseEntity.ok(product);
+            product.setActive(false);
+            return ResponseEntity.noContent().build();
         } else {
-            throw new EntityNotFoundException();
+            return ResponseEntity.notFound().build();
         }
 
     }
