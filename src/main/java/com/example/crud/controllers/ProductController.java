@@ -56,7 +56,7 @@ public class ProductController {
             product.setActive(false);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException();
         }
 
     }
